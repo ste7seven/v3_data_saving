@@ -18,7 +18,9 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
+    public Text HighScoreText; // Neues Textfeld für den Highscore
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +38,9 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        // Zeige den Highscore an
+        HighScoreText.text = "High Score: " + DataManager.Instance.highScorePlayerName + " : " + DataManager.Instance.highScore;
     }
 
     private void Update()
@@ -72,5 +77,13 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+
+        // Überprüfe, ob ein neuer Highscore erreicht wurde
+        if (m_Points > DataManager.Instance.highScore)
+        {
+            DataManager.Instance.highScore = m_Points;
+            DataManager.Instance.highScorePlayerName = DataManager.Instance.playerName;
+            DataManager.Instance.SaveHighScore();
+        }
     }
 }
